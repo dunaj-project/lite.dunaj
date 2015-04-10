@@ -1,1 +1,0 @@
-This repository is just for storing web page for Dunaj lite. See gh-pages branch for page sources.
