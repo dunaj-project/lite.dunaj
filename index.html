@@ -1,1 +1,360 @@
-coming soon.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
+<title>Dunaj lite</title>
+<link rel="stylesheet" href="./dd.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./coderay-asciidoctor.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>Dunaj lite</h1>
+</div>
+<div id="content">
+<header id="dd-header"><div id="dd-logo"><a href="http://lite.dunaj.org"><img src="dunaj.png"></img>Dunaj lite</a></div><div id="dd-mmenu"><a class="dd-mmlink" href="index.html"><i class="fa fa-home dd-mmsh"></i> <span>Dunaj</span></a><a class="dd-mmlink" href="https://github.com/dunaj-project"><i class="fa fa-github dd-mmsh"></i> <span>Source at Github</span></a></div></header><div id="dd-flex"><section id="dd-content"><div class="dd-over" tabindex="-1" id="dd-focus"><div id="header"><h1 id="dd-top">Dunaj lite </h1><div class="details">Copyright © 2013, 2015, &nbsp;<span class="author">Jozef Wagner</span><br><span id="revdate">version 0.4.0</span></div></div><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dunaj lite is a library-only version of <a href="http://www.dunaj.org">Dunaj</a>.</p>
+</div>
+<div class="paragraph">
+<p>Dunaj lite is ideal for cases where you want to evaluate Dunaj
+in existing projects, or in cases you cannot or don&#8217;t want to use
+custom Clojure forks. The main differences are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>more verbose and less elegant usage</p>
+</li>
+<li>
+<p>small decrease of performance</p>
+</li>
+<li>
+<p>no qualified special symbols</p>
+</li>
+<li>
+<p>no changes to primitive types</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_differences_from_dunaj">Differences from Dunaj</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dunaj lite provides nearly identical functionality than Dunaj. There
+are differences, but for casual use the experience is the same as
+if using Dunaj.
+Following list of differences are relevant for users of Dunaj lite:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>no qualified special symbols</p>
+<div class="ulist">
+<ul>
+<li>
+<p>cannot shadow special symbols with custom macros</p>
+</li>
+<li>
+<p>cannot unmap special symbols</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>default imported classes are left untouched
+(they are unmapped in Dunaj)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A consequence of this is that it is now not possible to
+define e.g. <code>String</code> or <code>Class</code> deftype</p>
+</li>
+<li>
+<p>clashing deftypes have now <code>+</code> suffix</p>
+</li>
+<li>
+<p><code>String+</code>, <code>Class+</code>, <code>Number+</code>, <code>Integer+</code>, <code>Float+</code>, <code>Thread+</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>more verbose ns declaration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>no <code>:api</code> declaration</p>
+</li>
+<li>
+<p>use <code>dunaj.core/dunaj-api!</code> instead (see next section)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>no additional primitive types</p>
+<div class="ulist">
+<ul>
+<li>
+<p>mainly <code>boolean</code> and <code>int</code> are missed</p>
+</li>
+<li>
+<p><code>iloop</code> behaves the same as <code>loop</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>a little bit slower than Dunaj</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Minor differnces that most users won&#8217;t even notice:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>no custom capacity hint in <code>edit</code></p>
+</li>
+<li>
+<p>fewer support for <code>ICounted</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>e.g. strings are not counted</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>types that are no longer seqable (use <code>d.c.h/red-to-seq</code> instead)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>batches</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>no support for <code>c.c.contains?</code> in following types</p>
+<div class="ulist">
+<ul>
+<li>
+<p>array adaptors</p>
+</li>
+<li>
+<p>reversed vector sections</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Following list of differences are relevant for implementers of new
+collection types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>more boilerplate for custom collection types</p>
+<div class="ulist">
+<ul>
+<li>
+<p>handling of <code>Seqable</code>, <code>Indexed</code>, <code>Counted</code>, <code>Lookup</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if <code>ILookup</code>, must also implement</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>c.l.ILookup/valAt</code></p>
+</li>
+<li>
+<p>something from <code>c.l.Associative</code>, <code>c.l.IPersistentSet</code>,
+<code>j.l.Map</code> or <code>j.l.Set</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>if <code>IIndexed</code>, must also implement</p>
+<div class="ulist">
+<ul>
+<li>
+<p>2 args <code>c.l.IIndexed/nth</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started">Getting started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can start using Dunaj just like any other Clojure library.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Dunaj lite requires Oracle JDK 8. Also note that so far
+Dunaj lite has only been tested under Linux.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code><strong>[org.dunaj/dunaj-lite "0.4.0"]</strong></code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can also start using Dunaj lite with a
+<a href="https://github.com/dunaj-project/dunaj-lite-starter">dunaj-lite-starter</a>
+leiningen project. Clone starter repository with
+<code>git clone <a href="https://github.com/dunaj-project/dunaj-lite-starter.git" class="bare">https://github.com/dunaj-project/dunaj-lite-starter.git</a></code>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_repl">REPL</h3>
+<div class="paragraph">
+<p>After starting REPL (e.g. with <code>lein repl</code>), eval following
+to start working with Dunaj:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td>
+  <td class="code"><pre>user=&gt; (<span class="keyword">require</span> 'dunaj.core)
+<span class="predefined-constant">nil</span>
+user=&gt; (dunaj.core/dunaj!)
+<span class="error">#</span>object[clojure.lang.Namespace <span class="integer">0</span>xf273036 <span class="string"><span class="delimiter">&quot;</span><span class="content">dunaj.user</span><span class="delimiter">&quot;</span></span>]
+dunaj.user=&gt; (println! (<span class="keyword">str</span> (<span class="keyword">print</span> json [<span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span>] {<span class="symbol">:a</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>})))
+[<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>] {<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span><span class="error">:</span><span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>}
+<span class="predefined-constant">nil</span></pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_use_in_sources">Use in sources</h3>
+<div class="paragraph">
+<p>To use Dunaj lite in your sources, disable refering
+clojure.core vars and call <code>dunaj.core/dunaj-api!</code> macro.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+<strong>10</strong>
+11
+12
+13
+14
+15
+16
+</pre></td>
+  <td class="code"><pre>(<span class="keyword">ns</span> <span class="namespace">dunaj-starter.core</span>
+  (<span class="symbol">:refer-clojure</span> <span class="symbol">:only</span> [])
+  (<span class="symbol">:require</span> [dunaj.core <span class="symbol">:refer</span> [dunaj-api!]]))
+
+(dunaj-api!)
+
+(<span class="keyword">defn</span> <span class="function">bar</span> <span class="symbol">:-</span> String
+  [s <span class="symbol">:-</span> String]
+  (<span class="keyword">str</span> (<span class="keyword">print</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello %s!</span><span class="delimiter">&quot;</span></span> s)))
+
+(<span class="keyword">defn</span> <span class="function">foo</span> <span class="symbol">:-</span> <span class="predefined-constant">nil</span>
+  [s <span class="symbol">:-</span> String]
+  (println! (bar s))
+  <span class="predefined-constant">nil</span>)
+
+(foo <span class="string"><span class="delimiter">&quot;</span><span class="content">World</span><span class="delimiter">&quot;</span></span>)</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use <code>dunaj-api!</code> to custome whats get referred. Following
+example shows a bit more elaborate Dunaj referring.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+<strong>10</strong>
+11
+</pre></td>
+  <td class="code"><pre>(<span class="keyword">ns</span> <span class="namespace">dunaj-starter.core</span>
+  (<span class="symbol">:refer-clojure</span> <span class="symbol">:only</span> [])
+  (<span class="symbol">:require</span> [dunaj.core <span class="symbol">:refer</span> [dunaj-api!]]
+            [dunaj.set <span class="symbol">:refer</span> [intersection]]))
+
+(dunaj-api!
+  (<span class="symbol">:refer-dunaj</span> <span class="symbol">:exclude</span> [<span class="keyword">+</span>])
+  <span class="comment">;; you can require additional stuff here</span>
+  (<span class="symbol">:require</span> [dunaj.math.precise <span class="symbol">:refer</span> [<span class="keyword">+</span>]]))
+
+<span class="comment">;; ...</span></pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div id="blo"></div>
+</div>
+</div>
+</div></div></section></div><script>window.onload = function() {document.getElementById('dd-focus').focus();}</script>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-04-12 19:54:15 CEST
+</div>
+</div>
+</body>
+</html>
